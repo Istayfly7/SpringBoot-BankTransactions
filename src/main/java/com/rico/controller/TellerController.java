@@ -3,7 +3,7 @@ package com.rico.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rico.entity.Bank;
+import com.rico.model.Bank;
 import com.rico.model.Teller;
 
 @RestController

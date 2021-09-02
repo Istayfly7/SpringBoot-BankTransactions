@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rico.entity.Bank;
-import com.rico.repository.BankRepository;
+import com.rico.entity.Transaction;
+import com.rico.repository.TransactionRepository;
 
 @RestController
-@RequestMapping("/bank")
-public class BankController {
+@RequestMapping("/transactions")
+public class TransactionController {
 	
 	@Autowired
-	private BankRepository bankRepository;
+	private TransactionRepository transactionsRepository;
 	
 	@GetMapping("/")
-	public ResponseEntity<List<Bank>> getAllBanks(
+	public ResponseEntity<List<Transaction>> getAllTransactions(
 			@RequestParam(required=false) String transType){
 		try {
-			List<Bank> transList = new ArrayList<>();
+			List<Transaction> transList = new ArrayList<>();
 			
 			if(transType==null)
-				bankRepository.findAll().forEach(transList::add);
+				transactionsRepository.findAll().forEach(transList::add);
 			else if(transType!=null)
-				bankRepository.findByTransType(transType).forEach(transList::add);
+				transactionsRepository.findByTransType(transType).forEach(transList::add);
 			
 			return new ResponseEntity<>(transList, HttpStatus.OK);
 		}
@@ -43,12 +43,12 @@ public class BankController {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Bank>> getAccountById(@PathVariable("id") int id){
+	public ResponseEntity<Optional<Transaction>> getTransactionById(@PathVariable("id") int id){
 		try {
-			Optional<Bank> b = bankRepository.findById(id);
+			Optional<Transaction> t = transactionsRepository.findById(id);
 			
-			if(b.isPresent())
-				return new ResponseEntity<>(b, HttpStatus.OK);
+			if(t.isPresent())
+				return new ResponseEntity<>(t, HttpStatus.OK);
 			else
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}

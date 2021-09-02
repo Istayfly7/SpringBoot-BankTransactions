@@ -1,7 +1,5 @@
 package com.rico.model;
 
-import com.rico.entity.Bank;
-
 public class Teller implements Runnable {
 	private Bank bank;
 	

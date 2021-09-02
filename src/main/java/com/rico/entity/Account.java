@@ -1,27 +1,34 @@
 package com.rico.entity;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.rico.repository.TransactionRepository;
+import com.rico.entity.Transaction;
+
 @Entity
-@Table(name="Accounts")
+@Table(name="accounts")
 public class Account implements Comparable<Account>{
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String accName;
 	private double balance;
 
 	@Autowired
-	@ManyToMany(mappedBy="account", cascade=CascadeType.ALL)
-	private List<Bank> trans;
+	@ManyToMany(mappedBy="accountsList", cascade=CascadeType.ALL)
+	private Set<Transaction> transList;
 	
 	public Account () {}
 
@@ -31,13 +38,30 @@ public class Account implements Comparable<Account>{
 		this.balance = balance;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
+	
+	@Override
+    public boolean equals(Object obj) {
+		if(this == obj)
+			return true;
+		if(obj==null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		return Objects.equals(id, other.getId());
+	}
+	
 
-	public List<Bank> getTrans() {
-		return trans;
+	public Set<Transaction> getTransList() {
+		return transList;
 	}
 
-	public void setTrans(List<Bank> trans) {
-		this.trans = trans;
+	public void setTransList(Set<Transaction> transList) {
+		this.transList = transList;
 	}
 
 	public int getId() {
@@ -79,7 +103,7 @@ public class Account implements Comparable<Account>{
 	}
 	
 	
-	public synchronized boolean deposit(double amount) throws InterruptedException {
+	public synchronized boolean deposit(double amount, TransactionRepository transactionRepository) throws InterruptedException {
 		
 		double balance = this.balance;
 		Thread.sleep(600);
@@ -88,11 +112,13 @@ public class Account implements Comparable<Account>{
 		Thread.sleep(400);
 		
 		this.balance = balance;
+		Transaction trans = new Transaction(0, "Deposit", amount);
+		transactionRepository.save(trans);
 		return true;
 	}
 	
 	
-	public synchronized boolean withdraw(double amount) throws InterruptedException {
+	public synchronized boolean withdraw(double amount, TransactionRepository transactionRepository) throws InterruptedException {
 		
 		double balance = this.balance;
 		Thread.sleep(600);
@@ -104,6 +130,8 @@ public class Account implements Comparable<Account>{
 		Thread.sleep(400);
 		
 		this.balance = balance;
+		Transaction trans = new Transaction(0, "Withdraw", amount);
+		transactionRepository.save(trans);
 		return true;
 	}
 	
