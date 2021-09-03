@@ -1,20 +1,27 @@
 package com.rico.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rico.entity.Account;
+import com.rico.repository.AccountRepository;
 import com.rico.repository.TransactionRepository;
 
 public class Bank {
 	
 	@Autowired
-	private List<Account> accountsList;
-	
-	@Autowired
 	private TransactionRepository transactionRepository;
 	
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	private List<Account> accountsList = new ArrayList<>();
+	
+	public Bank() {
+		accountRepository.findAll().forEach(accountsList::add);
+	}
 	
 	public List<Account> getAccounts() {
 		return accountsList;
@@ -27,6 +34,7 @@ public class Bank {
 	
 	public void transferAmount(int toAcc, int fromAcc, double amount) 
 			throws InterruptedException{
+		System.out.println("List: " + accountsList);
 		
 		accountsList.get(fromAcc).withdraw(amount, transactionRepository);
 		accountsList.get(toAcc).deposit(amount, transactionRepository);

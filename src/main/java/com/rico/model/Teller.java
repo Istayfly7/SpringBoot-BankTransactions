@@ -1,6 +1,6 @@
 package com.rico.model;
 
-public class Teller implements Runnable {
+public class Teller implements Runnable{
 	private Bank bank;
 	
 	public Teller(Bank bank) {

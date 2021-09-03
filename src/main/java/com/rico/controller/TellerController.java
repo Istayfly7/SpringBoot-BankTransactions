@@ -7,10 +7,11 @@ import com.rico.model.Bank;
 import com.rico.model.Teller;
 
 @RestController
-@RequestMapping("/process-transactions/")
+@RequestMapping("/process-transactions")
 public class TellerController {
 
-	public TellerController() {
+	@RequestMapping("/")
+	public void process() {
 		Bank bankRef = new Bank();
 
 		Runnable target = new Teller(bankRef);
