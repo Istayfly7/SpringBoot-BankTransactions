@@ -3,26 +3,25 @@ package com.rico.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.rico.entity.Account;
 import com.rico.repository.AccountRepository;
 import com.rico.repository.TransactionRepository;
 
 public class Bank {
 	
-	@Autowired
 	private TransactionRepository transactionRepository;
-	
-	@Autowired
-	private AccountRepository accountRepository;
 	
 	private List<Account> accountsList = new ArrayList<>();
 	
 	public Bank() {
-		accountRepository.findAll().forEach(accountsList::add);
 	}
 	
+	public Bank(AccountRepository accountRepository, TransactionRepository transactionRepository) {
+		// TODO Auto-generated constructor stub
+		accountRepository.findAll().forEach(accountsList::add);
+		this.transactionRepository = transactionRepository;
+	}
+
 	public List<Account> getAccounts() {
 		return accountsList;
 	}

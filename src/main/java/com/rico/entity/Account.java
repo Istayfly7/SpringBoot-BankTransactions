@@ -131,6 +131,7 @@ public class Account implements Comparable<Account>{
 		
 		this.balance = balance;
 		Transaction trans = new Transaction(0, "Withdraw", amount);
+		System.out.println("Transactions: " + trans.toString());
 		transactionRepository.save(trans);
 		return true;
 	}

@@ -1,18 +1,27 @@
 package com.rico.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rico.model.Bank;
 import com.rico.model.Teller;
+import com.rico.repository.AccountRepository;
+import com.rico.repository.TransactionRepository;
 
 @RestController
 @RequestMapping("/process-transactions")
 public class TellerController {
 
+	@Autowired
+	private AccountRepository accountRepository;
+	
+	@Autowired
+	private TransactionRepository transactionRepository;
+	
 	@RequestMapping("/")
 	public void process() {
-		Bank bankRef = new Bank();
+		Bank bankRef = new Bank(accountRepository, transactionRepository);
 
 		Runnable target = new Teller(bankRef);
 
