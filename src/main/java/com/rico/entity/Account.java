@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import com.rico.repository.AccountRepository;
 import com.rico.repository.TransactionRepository;
 import com.rico.entity.Transaction;
 
@@ -103,7 +103,7 @@ public class Account implements Comparable<Account>{
 	}
 	
 	
-	public synchronized boolean deposit(double amount, TransactionRepository transactionRepository) throws InterruptedException {
+	public synchronized boolean deposit(double amount, TransactionRepository transactionRepository, AccountRepository accountRepository) throws InterruptedException {
 		
 		double balance = this.balance;
 		Thread.sleep(600);
@@ -114,11 +114,13 @@ public class Account implements Comparable<Account>{
 		this.balance = balance;
 		Transaction trans = new Transaction(0, "Deposit", amount);
 		transactionRepository.save(trans);
+		accountRepository.save(this);
+		
 		return true;
 	}
 	
 	
-	public synchronized boolean withdraw(double amount, TransactionRepository transactionRepository) throws InterruptedException {
+	public synchronized boolean withdraw(double amount, TransactionRepository transactionRepository, AccountRepository accountRepository) throws InterruptedException {
 		
 		double balance = this.balance;
 		Thread.sleep(600);
@@ -131,8 +133,9 @@ public class Account implements Comparable<Account>{
 		
 		this.balance = balance;
 		Transaction trans = new Transaction(0, "Withdraw", amount);
-		System.out.println("Transactions: " + trans.toString());
 		transactionRepository.save(trans);
+		accountRepository.save(this);
+		
 		return true;
 	}
 	

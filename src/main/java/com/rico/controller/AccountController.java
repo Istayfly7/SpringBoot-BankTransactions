@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,6 +87,26 @@ public class AccountController {
 			
 			return new ResponseEntity<>(accountsList, HttpStatus.OK);
 			
+		}
+		catch(Exception ex) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Account> updateAccount(@RequestBody Account account, @PathVariable(name="id") int acc_id){
+		try {
+			Optional<Account> _acc = accountRepository.findById(acc_id);
+			
+			if(_acc != null) {
+				Account _acc_data = _acc.get();
+			
+				Account acc = new Account(_acc_data.getId(), account.getAccName(), account.getBalance());
+				accountRepository.save(acc);
+				return new ResponseEntity<>(acc, HttpStatus.OK);
+			}
+			else
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 		catch(Exception ex) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

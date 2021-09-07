@@ -11,6 +11,8 @@ public class Bank {
 	
 	private TransactionRepository transactionRepository;
 	
+	private AccountRepository accountRepository;
+	
 	private List<Account> accountsList = new ArrayList<>();
 	
 	public Bank() {
@@ -20,6 +22,7 @@ public class Bank {
 		// TODO Auto-generated constructor stub
 		accountRepository.findAll().forEach(accountsList::add);
 		this.transactionRepository = transactionRepository;
+		this.accountRepository = accountRepository;
 	}
 
 	public List<Account> getAccounts() {
@@ -33,14 +36,13 @@ public class Bank {
 	
 	public void transferAmount(int toAcc, int fromAcc, double amount) 
 			throws InterruptedException{
-		System.out.println("List: " + accountsList);
 		
-		accountsList.get(fromAcc).withdraw(amount, transactionRepository);
-		accountsList.get(toAcc).deposit(amount, transactionRepository);
+		accountsList.get(fromAcc).withdraw(amount, transactionRepository, accountRepository);
+		accountsList.get(toAcc).deposit(amount, transactionRepository, accountRepository);
 		
 		String threadName = Thread.currentThread().getName();
 		
-		System.out.println(threadName + "\ttransfer done from "+ fromAcc + " to "+ toAcc);
+		System.out.println(threadName + "\ttransfer done from "+ (fromAcc+1) + " to "+ (toAcc+1));
 	}
 	
 	
