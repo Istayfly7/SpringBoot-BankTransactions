@@ -21,7 +21,7 @@ import com.rico.entity.Transaction;
 public class Account implements Comparable<Account>{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String accName;
 	private double balance;

@@ -1,6 +1,7 @@
 package com.rico.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,28 @@ public class AccountController {
 		try {
 			Account acc = accountRepository.save(account);
 			return new ResponseEntity<>(acc, HttpStatus.OK);
+		}
+		catch(Exception ex) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/save-default")
+	public ResponseEntity<List<Account>> createDefaultAccounts(){
+		try {
+			Account acc1 = new Account(0, "George", 500.00);
+			Account acc2 = new Account(0, "Abraham", 650.00);
+			Account acc3 = new Account(0, "Thomas", 350.00);
+			Account acc4 = new Account(0, "Benjamin", 1000.00);
+			Account acc5 = new Account(0, "Theodore", 400.00);
+			Account acc6 = new Account(0, "Barack", 750.00);
+			
+			List<Account> accountsList = Arrays.asList(acc1, acc2, acc3, acc4, acc5, acc6);
+			for(Account account:accountsList)
+				accountRepository.save(account);
+			
+			return new ResponseEntity<>(accountsList, HttpStatus.OK);
+			
 		}
 		catch(Exception ex) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

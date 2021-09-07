@@ -14,10 +14,10 @@ public class Teller implements Runnable{
 	}
 	
 	private void doWork(){
-		//3 transactions on accounts with id's between 0-4
+		//3 transactions on accounts with id's between 1-6
 		for(int i = 0; i<3; i++){
-			int toAcc = (int)(Math.random() * 5);
-			int fromAcc = (int)(Math.random() * 5);
+			int toAcc = 1 + (int)(Math.random() * 5);
+			int fromAcc = 1 + (int)(Math.random() * 5);
 			int amount = (int)(Math.random() * 501);
 				
 			try {
